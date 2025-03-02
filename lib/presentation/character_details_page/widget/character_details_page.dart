@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,7 +5,10 @@ import 'package:tabit/di/characters_injection.dart';
 import 'package:tabit/domain/usecase/characters_use_case.dart';
 import 'package:tabit/presentation/character_details_page/bloc/character_details_page_bloc.dart';
 import 'package:tabit/presentation/character_details_page/bloc/character_details_page_state.dart';
+import 'package:tabit/presentation/character_details_page/widget/inner_widgets/app_bar_title.dart';
+import 'package:tabit/presentation/character_details_page/widget/inner_widgets/core_data.dart';
 
+/// The character details page.
 class CharacterDetailsPage extends ConsumerWidget {
   const CharacterDetailsPage({
     super.key,
@@ -14,10 +16,15 @@ class CharacterDetailsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    /// An instance of the CharactersUseCase.
     final CharactersUseCase charactersUseCase =
         ref.watch(charactersUseCaseProvider);
+
+    /// The input arguments of this page.
     final arguments = ModalRoute.of(context)!.settings.arguments;
+
     return BlocProvider(
+      // Create the related bloc.
       create: (context) => CharacterDetailsPageBloc(
         charactersUseCase: charactersUseCase,
         arguments: arguments,
@@ -51,145 +58,41 @@ class CharacterDetailsPage extends ConsumerWidget {
                   padding: const EdgeInsets.all(10.0),
                   child: BlocBuilder<CharacterDetailsPageBloc,
                       CharacterDetailsPageState>(
-                    builder: (context, state) => state.when(
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                      init: (characterDetailsView) => _AppBarTitle(
-                        characterDetailsView: characterDetailsView,
-                      ),
-                      empty: (message) => Center(
-                        child:
-                            Text((state as CharacterDetailsPageEmpty).message),
-                      ),
-                    ),
+                    builder: (context, state) {
+                      // Handle the states.
+                      return state.when(
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                        init: (characterDetailsView) => AppBarTitle(
+                          characterDetailsView: characterDetailsView,
+                        ),
+                        empty: (message) => Center(
+                          child: Text(
+                              (state as CharacterDetailsPageEmpty).message),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
             ),
             body: BlocBuilder<CharacterDetailsPageBloc,
                 CharacterDetailsPageState>(
-              builder: (context, state) => AnimatedSwitcher(
-                duration: const Duration(milliseconds: 250),
-                child: state.when(
+              builder: (context, state) {
+                // Handle the states.
+                return state.when(
                   loading: () =>
                       const Center(child: CircularProgressIndicator()),
-                  init: (characterDetailsView) => _CoreDataWidget(
-                      characterDetailsView: characterDetailsView),
+                  init: (characterDetailsView) =>
+                      CoreData(characterDetailsView: characterDetailsView),
                   empty: (message) => Center(
                     child: Text((state as CharacterDetailsPageEmpty).message),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class _AppBarTitle extends StatelessWidget {
-  final CharacterDetailsView characterDetailsView;
-
-  const _AppBarTitle({
-    required this.characterDetailsView,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Hero(
-          tag: characterDetailsView.image,
-          child: CircleAvatar(
-            radius: 75,
-            backgroundColor: Colors.grey,
-            backgroundImage: NetworkImage(characterDetailsView.image),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 50,
-          child: AutoSizeText(
-            "Name: ${characterDetailsView.name}",
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-            maxLines: 1,
-            minFontSize: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _CoreDataWidget extends StatelessWidget {
-  final CharacterDetailsView characterDetailsView;
-
-  const _CoreDataWidget({
-    required this.characterDetailsView,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            alignment: AlignmentDirectional.topStart,
-            padding: const EdgeInsets.all(10.0),
-            child: AutoSizeText(
-              "Species: ${characterDetailsView.species}",
-              style: Theme.of(context).textTheme.titleLarge,
-              minFontSize: 1,
-            ),
-          ),
-          Container(
-            alignment: AlignmentDirectional.topStart,
-            padding: const EdgeInsets.all(10.0),
-            child: AutoSizeText(
-              "Status: ${characterDetailsView.status.name}",
-              style: Theme.of(context).textTheme.titleLarge,
-              minFontSize: 1,
-            ),
-          ),
-          Container(
-            alignment: AlignmentDirectional.topStart,
-            padding: const EdgeInsets.all(10.0),
-            child: AutoSizeText(
-              "Gender: ${characterDetailsView.gender.name}",
-              style: Theme.of(context).textTheme.titleLarge,
-              minFontSize: 1,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: AutoSizeText(
-                "Origin:\nName: ${characterDetailsView.origin.name}\nUrl: ${characterDetailsView.origin.url}",
-                style: Theme.of(context).textTheme.titleLarge,
-                minFontSize: 1,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: AutoSizeText(
-                "Location:\nName: ${characterDetailsView.location.name}\nUrl: ${characterDetailsView.location.url}",
-                style: Theme.of(context).textTheme.titleLarge,
-                minFontSize: 1,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

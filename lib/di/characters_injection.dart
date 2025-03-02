@@ -9,16 +9,12 @@ import 'package:tabit/domain/usecase/characters_use_case.dart';
 import 'package:tabit/domain/usecase/characters_use_case_impl.dart';
 
 final charactersDio = Provider<Dio>(
-    (ref) => Dio(),
+  (ref) => Dio(),
 );
 
 final charactersDataSource = Provider<CharactersDataSource>(
   (ref) => CharactersRestClient(ref.watch(charactersDio)),
 );
-
-// final appDatabaseProvider = Provider<AppDatabase>(
-//   (ref) => AppDatabase(),
-// );
 
 final charactersTransformer =
     Provider<CharactersTransformer>((ref) => CharactersTransformer());
@@ -26,7 +22,6 @@ final charactersTransformer =
 final charactersRepositoryProvider = Provider<CharactersRepository>(
   (ref) => CharactersRepositoryImpl(
     charactersDataSource: ref.watch(charactersDataSource),
-    // appDatabase: ref.watch(appDatabaseProvider),
     transformer: ref.watch(charactersTransformer),
   ),
 );

@@ -3,6 +3,7 @@ import 'package:tabit/domain/entity/character_entity.dart';
 
 part 'character_list_page_state.freezed.dart';
 
+/// The states of the character list page.
 @freezed
 class CharacterListPageState with _$CharacterListPageState {
   const CharacterListPageState._();
@@ -19,6 +20,7 @@ class CharacterListPageState with _$CharacterListPageState {
       String topMessage, String bottomMessage) = CharacterListPageError;
 }
 
+/// The success state's data object.
 class CharacterItemView {
   final String name;
   final String species;

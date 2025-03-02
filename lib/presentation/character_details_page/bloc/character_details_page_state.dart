@@ -3,6 +3,7 @@ import 'package:tabit/domain/entity/character_entity.dart';
 
 part 'character_details_page_state.freezed.dart';
 
+/// The states of the character details page.
 @freezed
 class CharacterDetailsPageState with _$CharacterDetailsPageState {
   const CharacterDetailsPageState._();
@@ -17,6 +18,7 @@ class CharacterDetailsPageState with _$CharacterDetailsPageState {
       CharacterDetailsPageEmpty;
 }
 
+/// The init state's data object.
 class CharacterDetailsView {
   final String name;
   final String species;

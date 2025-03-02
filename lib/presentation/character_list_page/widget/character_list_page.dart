@@ -8,10 +8,11 @@ import 'package:tabit/domain/usecase/characters_use_case.dart';
 import 'package:tabit/presentation/character_details_page/character_details_page_arguments.dart';
 import 'package:tabit/presentation/character_list_page/bloc/character_list_page_bloc.dart';
 import 'package:tabit/presentation/character_list_page/bloc/character_list_page_state.dart';
-import 'package:tabit/presentation/character_list_page/widget/search_bar.dart';
-import 'package:tabit/presentation/character_list_page/widget/status_dropdown.dart';
+import 'package:tabit/presentation/character_list_page/widget/inner_widgets/search_bar.dart';
+import 'package:tabit/presentation/character_list_page/widget/inner_widgets/status_dropdown.dart';
 import 'package:tabit/route.dart';
 
+/// The character list page.
 class CharacterListPage extends ConsumerWidget {
   const CharacterListPage({
     super.key,
@@ -25,7 +26,8 @@ class CharacterListPage extends ConsumerWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
-          resizeToAvoidBottomInset: false, // Prevents keyboard from pushing UI
+          // Prevents keyboard from pushing UI
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: const SizedBox(
               height: kToolbarHeight,
@@ -44,6 +46,7 @@ class CharacterListPage extends ConsumerWidget {
               }
             },
             child: BlocProvider(
+              // Create the related bloc.
               create: (context) =>
                   CharacterListPageBloc(charactersUseCase: charactersUseCase),
               child: Builder(builder: (context) {
@@ -60,21 +63,27 @@ class CharacterListPage extends ConsumerWidget {
   }
 }
 
+/// The core widget of this character list page.
 class _CoreWidget extends StatefulWidget {
   final CharacterListPageBloc characterListPageBloc;
 
-  const _CoreWidget({required this.characterListPageBloc});
+  const _CoreWidget({
+    required this.characterListPageBloc,
+  });
 
   @override
   _CoreWidgetState createState() => _CoreWidgetState();
 }
 
 class _CoreWidgetState extends State<_CoreWidget> {
+  /// A subscription of CharacterDetailsPageArguments.
   late final StreamSubscription<CharacterDetailsPageArguments> _subscription;
 
   @override
   void initState() {
     super.initState();
+    // Listen to the related bloc's requests to move to the details page,
+    // if possible, and pass it the arguments.
     _subscription = widget.characterListPageBloc
         .getMoveToCharacterDetailPageRequestsStream()
         .listen((arguments) {
@@ -91,19 +100,23 @@ class _CoreWidgetState extends State<_CoreWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // The search bar to filter characters.
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: SearchBarWidget(
               characterListPageBloc: widget.characterListPageBloc),
         ),
+        // The status type dropdown to filter characters.
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: StatusDropdown(
               characterListPageBloc: widget.characterListPageBloc),
         ),
+        // The character list.
         Expanded(
           child: BlocBuilder<CharacterListPageBloc, CharacterListPageState>(
             builder: (context, state) {
+              // Handle the states.
               final Widget bodyWidget = state.maybeWhen(
                 loading: () => const Center(child: CircularProgressIndicator()),
                 success: (characters) => _SuccessWidget(
@@ -114,6 +127,7 @@ class _CoreWidgetState extends State<_CoreWidget> {
                   child: Text((state as CharacterListPageEmpty).message),
                 ),
                 error: (code, message) {
+                  // When error, show the input messages.
                   final stateData = (state as CharacterListPageError);
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -146,6 +160,7 @@ class _CoreWidgetState extends State<_CoreWidget> {
   }
 }
 
+/// The widget to show when a success state emitted.
 class _SuccessWidget extends StatefulWidget {
   final CharacterListPageBloc characterListPageBloc;
   final List<CharacterItemView> characters;
@@ -160,6 +175,7 @@ class _SuccessWidget extends StatefulWidget {
 }
 
 class _SuccessWidgetState extends State<_SuccessWidget> {
+  /// The scroll controller of the list.
   late final ScrollController _scrollController;
 
   @override
@@ -170,7 +186,8 @@ class _SuccessWidgetState extends State<_SuccessWidget> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       // Trigger pagination when reaching 200px from the bottom.
       widget.characterListPageBloc.onBottomToBeReachByScroll();
     }
@@ -190,6 +207,7 @@ class _SuccessWidgetState extends State<_SuccessWidget> {
               padding: const EdgeInsetsDirectional.all(8.0),
               child: Row(
                 children: [
+                  // The character image.
                   SizedBox(
                     height: 80,
                     width: 80,
@@ -203,14 +221,17 @@ class _SuccessWidgetState extends State<_SuccessWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // The character name.
                         Text(
                           "Name: ${widget.characters[index].name}",
                           overflow: TextOverflow.ellipsis,
                         ),
+                        // The character species.
                         Text(
                           "Species: ${widget.characters[index].species}",
                           overflow: TextOverflow.ellipsis,
                         ),
+                        // The character status type.
                         Text(
                           "Status: ${widget.characters[index].status.name}",
                           overflow: TextOverflow.ellipsis,
@@ -231,6 +252,7 @@ class _SuccessWidgetState extends State<_SuccessWidget> {
 
   @override
   void dispose() {
+    // Dispose the scroll controller.
     _scrollController.dispose();
     super.dispose();
   }

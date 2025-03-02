@@ -2,31 +2,32 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'character_model.g.dart';
 
+/// The model of the character.
 @JsonSerializable(explicitToJson: true)
 class CharacterModel {
-  // The id of the character.
+  /// The id of the character.
   final int id;
-  // The name of the character.
+  /// The name of the character.
   final String name;
-  // The status of the character.
+  /// The status of the character.
   final String status;
-  // The species of the character.
+  /// The species of the character.
   final String species;
-  // The type or subspecies of the character.
+  /// The type or subspecies of the character.
   final String type;
-  // The gender of the character
+  /// The gender of the character.
   final String gender;
-  // Name and link to the character's origin location.
+  /// Name and link to the character's origin location.
   final CharacterLocationModel origin;
-  // Name and link to the character's last known location endpoint.
+  /// Name and link to the character's last known location endpoint.
   final CharacterLocationModel location;
-  // Link to the character's image.
+  /// Link to the character's image.
   final String image;
-  // List of episodes in which this character appeared.
+  /// List of episodes in which this character appeared.
   final List<String> episode;
-  // Link to the character's own URL endpoint.
+  /// Link to the character's own URL endpoint.
   final String url;
-  // Time at which the character was created in the database.
+  /// Time at which the character was created in the database.
   final DateTime created;
 
   const CharacterModel({
@@ -50,12 +51,12 @@ class CharacterModel {
   Map<String, dynamic> toJson() => _$CharacterModelToJson(this);
 }
 
-// Name and link to the character's location.
+/// Name and link to the character's location.
 @JsonSerializable(explicitToJson: true)
 class CharacterLocationModel {
-  // Name of the character's location.
+  /// Name of the character's location.
   final String name;
-  // Link to the character's location.
+  /// Link to the character's location.
   final String url;
 
   const CharacterLocationModel({

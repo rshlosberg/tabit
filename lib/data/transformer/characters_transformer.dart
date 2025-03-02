@@ -5,7 +5,10 @@ import 'package:tabit/data/model/container_response_model.dart';
 import 'package:tabit/domain/entity/character_entity.dart';
 import 'package:tabit/domain/entity/characters_page_entity.dart';
 
+/// The main transformer between characters models to characters entities.
 class CharactersTransformer {
+
+  /// Transform [CharacterPageModel] to [CharactersPageEntity].
   CharactersPageEntity transformCharacterPageModel({
     required CharacterPageModel characterPageModel,
   }) {
@@ -18,6 +21,7 @@ class CharactersTransformer {
     );
   }
 
+  /// Transform [CharacterModel] to [CharacterEntity].
   CharacterEntity transformCharacterModel({
     required CharacterModel characterModel,
   }) {
@@ -43,6 +47,7 @@ class CharactersTransformer {
     );
   }
 
+  /// Transform [InfoModel] to [InfoEntity].
   InfoEntity _transformInfoModel({
     required InfoModel infoModel,
   }) {
@@ -52,6 +57,7 @@ class CharactersTransformer {
     );
   }
 
+  /// Transform [CharacterLocationModel] to [CharacterLocationEntity].
   CharacterLocationEntity _transformCharacterLocationModel({
     required CharacterLocationModel characterLocationModel,
   }) {

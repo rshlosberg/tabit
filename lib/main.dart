@@ -15,13 +15,13 @@ class MyApp extends StatelessWidget {
     super.key,
   });
 
-  // Define the routes of the app.
+  /// Define the routes of the app.
   static Map<String, Widget Function(dynamic _)> routes = {
     RouteScreens.characterDetailsPage: (_) => const CharacterDetailsPage(),
     RouteScreens.characterListPage: (_) => const CharacterListPage(),
   };
 
-  // This widget is the root of the app.
+  /// This widget is the root of the app.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

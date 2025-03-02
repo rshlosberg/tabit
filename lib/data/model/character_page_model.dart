@@ -4,6 +4,7 @@ import 'package:tabit/data/model/container_response_model.dart';
 
 part 'character_page_model.g.dart';
 
+/// The model of the a character page.
 @JsonSerializable(explicitToJson: true)
 class CharacterPageModel extends ContainerResponseModel<CharacterModel> {
   const CharacterPageModel({

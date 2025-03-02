@@ -3,6 +3,7 @@ import 'package:tabit/domain/entity/characters_page_entity.dart';
 import 'package:tabit/domain/repository/characters_repository.dart';
 import 'package:tabit/domain/usecase/characters_use_case.dart';
 
+/// The UseCase method implementations.
 class CharactersUseCaseImpl implements CharactersUseCase {
   final CharactersRepository charactersRepository;
 
@@ -10,6 +11,7 @@ class CharactersUseCaseImpl implements CharactersUseCase {
     required this.charactersRepository,
   });
 
+  /// Fetches the first page of characters.
   @override
   Stream<CharactersPageEntity> getInitialCharacters({
     String? name,
@@ -18,6 +20,7 @@ class CharactersUseCaseImpl implements CharactersUseCase {
     return charactersRepository.getInitialCharacters(name: name, status: statusType);
   }
 
+  /// Fetches characters from a specific page.
   @override
   Stream<CharactersPageEntity> getCharactersInPage({
     required int page,
@@ -27,6 +30,7 @@ class CharactersUseCaseImpl implements CharactersUseCase {
     return charactersRepository.getCharactersInPage(page: page, name: name, status: statusType);
   }
 
+  /// Fetches a single character by ID.
   @override
   Stream<CharacterEntity> getCharacterById({
     required int characterId,
